@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dashboard responsivo para comparar a evolução do salário mínimo e da inflação IPCA entre 2010 e 2020.">
+  <meta name="author" content="Edivandro Lima">
+  <meta name="theme-color" content="#0b1220">
+
+  <title>Salário x Inflação | Dashboard econômico</title>
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="./css/style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
+  <script src="./js/dados.js" defer></script>
+  <script src="./js/app.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#conteudo-principal">Pular para o conteúdo principal</a>
+
+  <header class="cabecalho">
+    <div class="container cabecalho__conteudo">
+      <a class="marca" href="#inicio" aria-label="Ir para o início">
+        <span class="marca__icone" aria-hidden="true">↗</span>
+        <span>
+          <strong>Salário x Inflação</strong>
+          <small>Dashboard econômico</small>
+        </span>
+      </a>
+
+      <nav class="navegacao" aria-label="Navegação principal">
+        <a href="#indicadores">Indicadores</a>
+        <a href="#graficos">Gráficos</a>
+        <a href="#detalhamento">Detalhamento</a>
+      </nav>
+
+      <button
+        class="botao-icone"
+        id="botao-tema"
+        type="button"
+        aria-label="Ativar tema escuro"
+        aria-pressed="false"
+        title="Alternar tema"
+      >
+        <span aria-hidden="true" id="icone-tema">☾</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="conteudo-principal">
+    <section class="hero" id="inicio" aria-labelledby="titulo-principal">
+      <div class="container hero__grade">
+        <div class="hero__conteudo">
+          <p class="etiqueta">Análise de 2010 a 2020</p>
+          <h1 id="titulo-principal">Entenda a relação entre salário mínimo e inflação</h1>
+          <p class="hero__descricao">
+            Visualize a evolução do salário mínimo, acompanhe o IPCA e identifique
+            em quais anos o reajuste salarial ficou acima ou abaixo da inflação.
+          </p>
+
+          <div class="hero__acoes">
+            <a class="botao botao--primario" href="#graficos">Explorar gráficos</a>
+            <a class="botao botao--secundario" href="#detalhamento">Ver tabela completa</a>
+          </div>
+        </div>
+
+        <aside class="hero__painel" aria-label="Resumo do período">
+          <p class="hero__painel-titulo">Resultado acumulado</p>
+          <strong id="resultado-acumulado">Carregando...</strong>
+          <span id="descricao-acumulada">Calculando a evolução do período.</span>
+
+          <div class="hero__mini-indicadores">
+            <div>
+              <span>Salário em 2010</span>
+              <strong id="salario-inicial-hero">—</strong>
+            </div>
+            <div>
+              <span>Salário em 2020</span>
+              <strong id="salario-final-hero">—</strong>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="secao" id="indicadores" aria-labelledby="titulo-indicadores">
+      <div class="container">
+        <div class="secao__cabecalho">
+          <div>
+            <p class="etiqueta">Visão geral</p>
+            <h2 id="titulo-indicadores">Principais indicadores</h2>
+          </div>
+
+          <div class="filtro">
+            <label for="filtro-ano">Destacar ano</label>
+            <select id="filtro-ano">
+              <option value="todos">Todos os anos</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="cards" aria-live="polite">
+          <article class="card-indicador">
+            <span class="card-indicador__rotulo">Salário inicial</span>
+            <strong id="card-salario-inicial">—</strong>
+            <small id="card-salario-inicial-ano">—</small>
+          </article>
+
+          <article class="card-indicador">
+            <span class="card-indicador__rotulo">Salário final</span>
+            <strong id="card-salario-final">—</strong>
+            <small id="card-salario-final-ano">—</small>
+          </article>
+
+          <article class="card-indicador">
+            <span class="card-indicador__rotulo">Maior inflação</span>
+            <strong id="card-maior-inflacao">—</strong>
+            <small id="card-maior-inflacao-ano">—</small>
+          </article>
+
+          <article class="card-indicador">
+            <span class="card-indicador__rotulo">Maior reajuste</span>
+            <strong id="card-maior-reajuste">—</strong>
+            <small id="card-maior-reajuste-ano">—</small>
+          </article>
+        </div>
+
+        <article class="destaque-ano" id="destaque-ano" hidden>
+          <div>
+            <span class="destaque-ano__etiqueta">Ano selecionado</span>
+            <h3 id="destaque-ano-titulo">—</h3>
+          </div>
+          <div class="destaque-ano__dados">
+            <p><span>Salário</span><strong id="destaque-salario">—</strong></p>
+            <p><span>Reajuste</span><strong id="destaque-reajuste">—</strong></p>
+            <p><span>IPCA</span><strong id="destaque-ipca">—</strong></p>
+            <p><span>Saldo real</span><strong id="destaque-saldo">—</strong></p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="secao secao--alternativa" id="graficos" aria-labelledby="titulo-graficos">
+      <div class="container">
+        <div class="secao__cabecalho">
+          <div>
+            <p class="etiqueta">Visualização</p>
+            <h2 id="titulo-graficos">Evolução dos indicadores</h2>
+          </div>
+          <p class="secao__descricao">
+            Passe o cursor ou toque nos pontos para consultar os valores.
+          </p>
+        </div>
+
+        <div class="grade-graficos">
+          <article class="painel-grafico painel-grafico--largo">
+            <div class="painel-grafico__cabecalho">
+              <div>
+                <h3>Evolução do salário mínimo</h3>
+                <p>Valores nominais em reais</p>
+              </div>
+            </div>
+            <div class="grafico-container">
+              <canvas id="grafico-salarios" role="img" aria-label="Gráfico de linha com a evolução do salário mínimo de 2010 a 2020"></canvas>
+            </div>
+          </article>
+
+          <article class="painel-grafico painel-grafico--largo">
+            <div class="painel-grafico__cabecalho">
+              <div>
+                <h3>Reajuste salarial x IPCA</h3>
+                <p>Comparação percentual anual</p>
+              </div>
+            </div>
+            <div class="grafico-container">
+              <canvas id="grafico-comparacao" role="img" aria-label="Gráfico comparativo entre reajuste salarial e inflação IPCA"></canvas>
+            </div>
+          </article>
+
+          <article class="painel-grafico">
+            <div class="painel-grafico__cabecalho">
+              <div>
+                <h3>Saldo real por ano</h3>
+                <p>Diferença entre reajuste e inflação</p>
+              </div>
+            </div>
+            <div class="grafico-container grafico-container--menor">
+              <canvas id="grafico-saldo" role="img" aria-label="Gráfico de barras com o saldo real anual"></canvas>
+            </div>
+          </article>
+
+          <article class="insight" aria-labelledby="titulo-insight">
+            <span class="insight__icone" aria-hidden="true">i</span>
+            <div>
+              <p class="etiqueta">Leitura rápida</p>
+              <h3 id="titulo-insight">O que os dados mostram?</h3>
+              <p id="texto-insight">Carregando análise...</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao" id="detalhamento" aria-labelledby="titulo-detalhamento">
+      <div class="container">
+        <div class="secao__cabecalho">
+          <div>
+            <p class="etiqueta">Dados completos</p>
+            <h2 id="titulo-detalhamento">Detalhamento anual</h2>
+          </div>
+
+          <button class="botao botao--secundario botao--compacto" id="botao-imprimir" type="button">
+            Imprimir relatório
+          </button>
+        </div>
+
+        <div class="tabela-wrapper" tabindex="0" aria-label="Tabela com dados anuais; role para os lados em telas pequenas">
+          <table>
+            <caption class="sr-only">
+              Salário mínimo, reajuste salarial, IPCA e saldo real entre 2010 e 2020
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Ano</th>
+                <th scope="col">Salário mínimo</th>
+                <th scope="col">Reajuste</th>
+                <th scope="col">IPCA</th>
+                <th scope="col">Saldo real</th>
+                <th scope="col">Situação</th>
+              </tr>
+            </thead>
+            <tbody id="corpo-tabela"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="container rodape__conteudo">
+      <div>
+        <strong>Salário x Inflação</strong>
+        <p>Projeto educacional desenvolvido com HTML, CSS, JavaScript e Chart.js.</p>
+      </div>
+
+      <p>Desenvolvido por <strong>Edivandro Lima</strong> · <span id="ano-atual"></span></p>
+    </div>
+  </footer>
+
+  <noscript>
+    <p class="aviso-noscript">Ative o JavaScript para visualizar os gráficos e indicadores.</p>
+  </noscript>
+</body>
+</html>
