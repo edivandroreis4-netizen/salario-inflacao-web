@@ -2,6 +2,15 @@
 
 Dashboard econômico responsivo criado com **HTML, CSS, JavaScript e Chart.js** para analisar a evolução do salário mínimo e da inflação IPCA entre 2010 e 2020.
 
+## Demonstração
+
+![Prévia do dashboard Salário x Inflação](./dashboard-preview.png)
+
+### Acesse o projeto
+
+- [Visualizar projeto online](https://salario-inflacao-web.vercel.app/)
+- [Acessar o código-fonte](https://github.com/edivandroreis4-netizen/salario-inflacao-web)
+
 ## Funcionalidades
 
 - Cards com os principais indicadores do período
